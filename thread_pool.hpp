@@ -1,9 +1,11 @@
-#include <thread>
-#include <functional>
-#include <vector>
-#include <queue>
-#include <mutex>
+#pragma once
+// std
 #include <condition_variable>
+#include <functional>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <vector>
 
 namespace threading {
 
@@ -16,9 +18,7 @@ class thread_pool {
                     std::function<void()> task;
                     {
                         std::unique_lock lock(mutex_);
-                        cv_.wait(lock, [this] {
-                            return stop_ || !tasks_.empty();
-                        });
+                        cv_.wait(lock, [this] { return stop_ || !tasks_.empty(); });
                         if (stop_ && tasks_.empty())
                             return;
                         task = std::move(tasks_.front());
@@ -37,7 +37,7 @@ class thread_pool {
         }
 
         cv_.notify_all();
-        for (auto &t : workers_)
+        for (auto& t : workers_)
             t.join();
     }
 
