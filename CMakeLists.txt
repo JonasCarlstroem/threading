@@ -4,15 +4,12 @@ cmake_minimum_required(VERSION 3.23)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(thread_pool INTERFACE)
+#add_library(thread_pool INTERFACE)
+CREATE_LIB(thread_pool INTERFACE)
 
-install(TARGETS thread_pool
-		EXPORT libTargets
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib
-		RUNTIME DESTINATION bin
-		INCLUDES DESTINATION include)
+target_include_directories(thread_pool INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:include/threading>
+)
 
-install(DIRECTORY include/ DESTINATION include)
-
-set(LIB_TARGETS thread_pool PARENT_SCOPE)
+INSTALL_LIB(thread_pool True threading)
